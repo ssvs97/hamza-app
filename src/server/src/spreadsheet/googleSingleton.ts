@@ -12,11 +12,15 @@ export class Google {
   }
 
   private async connect() {
-    await this.doc.useServiceAccountAuth({
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL as string,
-      private_key: process.env.GOOGLE_PRIVATE_KEY as string,
-    });
-    await this.doc.loadInfo();
+    try {
+      await this.doc.useServiceAccountAuth({
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL as string,
+        private_key: process.env.GOOGLE_PRIVATE_KEY as string,
+      });
+      await this.doc.loadInfo();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public static getInstance(): Google {
