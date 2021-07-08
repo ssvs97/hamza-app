@@ -12,5 +12,11 @@ class Mongoose {
   }
 }
 
+process.on("uncaughtException", (err) => {
+  console.log(err);
+  console.log(`UNCAUGHT REJECTION! Shutting down...`);
+  process.exit(1); // 0 success, 1 failure
+});
+
 const mongoose = new Mongoose();
 mongoose.connect();
