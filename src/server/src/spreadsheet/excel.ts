@@ -69,16 +69,20 @@ export class Excel {
   }
 
   private async googleSave(productName, productRows) {
-    const productHeader = this.header[productName];
+    try {
+      const productHeader = this.header[productName];
 
-    const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
+      const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
 
-    productHeader.unshift("date", "time", "account");
+      productHeader.unshift("date", "time", "account");
 
-    const mySet = new Set(productHeader);
-    const uniqueHeader = [...mySet];
+      const mySet = new Set(productHeader);
+      const uniqueHeader = [...mySet];
 
-    await googleSheet.setHeaderRow(uniqueHeader as string[]);
-    await googleSheet.addRows(productRows);
+      await googleSheet.setHeaderRow(uniqueHeader as string[]);
+      await googleSheet.addRows(productRows);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
