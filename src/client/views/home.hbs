@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<title>Hamza App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../vendor/main.css" type="text/css" media="all" />
+
+<body>
+    <div class="background"></div>
+    <div class="dropbox"></div>
+    <nav class="more-information-nav">
+        <table id='more-information-table'>
+            <thead>
+                <tr class="table100-head">
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody class="table-body"></tbody>
+        </table>
+    </nav>
+
+    <nav class="accounts-id-nav">
+        <table id='accounts-id-table'>
+            <thead>
+                <tr class="table100-head">
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Amount</th>
+                    <th>Account</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-body"></tbody>
+        </table>
+    </nav>
+    <main>
+        <section class="convert-section">
+            <div class="account-id">
+                <label class="accounts-label">Account </label>
+                <input id="account-id">
+                <img id="search-icon">
+            </div>
+            <textarea class="convert-textarea"></textarea>
+            <button class='convert-button'>Convert</button>
+        </section>
+        <section class="information-section">
+            <div class="today-block">
+                <div class="information-section__title">
+                    <img id="today-icon">
+                    <h1 class="information-title">Today</h1>
+                </div>
+                <hr>
+                <div class="information-data">
+                    <img id="cart-icon">
+                    <p id="today-quantity">0</p>
+                    <img id="price-icon">
+                    <div class="price-handle">
+                        <p id="today-total-price">0</p>
+                        <p> $</p>
+                    </div>
+                </div>
+            </div>
+            <div class="pending-block">
+                <div class="information-section__title">
+                    <img id="time-icon">
+                    <h1 class="information-title">Pending</h1>
+                </div>
+                <div class="more-info">
+                    <img class="more-info-image">
+                </div>
+                <hr>
+                <div class="information-data">
+                    <img id="cart-icon">
+                    <p id="pending-quantity">0</p>
+                    <img id="price-icon">
+                    <div class="price-handle">
+                        <p id="pending-total-price">0</p>
+                        <p> $</p>
+                    </div>
+                    <img class="download-image">
+                </div>
+            </div>
+        </section>
+        <div id="msgbox-area" class="msgbox-area">
+            <div class="msgbox-box red">
+                <div class="msgbox-content">
+                </div>
+                <a class="msgbox-close red" href="#">CLOSE</a>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="../build/bundle.js"></script>
+</body>
+
+</html>
