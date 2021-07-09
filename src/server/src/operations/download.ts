@@ -1,17 +1,11 @@
 import ProductService from "../services/productService";
 import path from "path";
 import fs from "fs";
-import { NextFunction, Response } from "express-serve-static-core";
+import { Response } from "express";
 import AppError from "../utils/appError";
 import { Excel } from "../spreadsheet/excel";
 
 export class Download {
-  private filePath: any;
-  constructor(private next: NextFunction) {
-    this.saveFile();
-    this.filePath = this.getPath();
-  }
-
   private async saveFile() {
     const products = await ProductService.getAllPendingProducts();
 
@@ -24,14 +18,16 @@ export class Download {
   private getPath() {
     const filePath = path.join(__dirname, "../../summary-data.xlsx");
 
-    if (!fs.existsSync(filePath))
-      return this.next(new AppError("File not found.", 404));
+    if (!fs.existsSync(filePath)) throw new AppError("File not found.", 404);
 
     return filePath;
   }
 
-  getStream(response: Response) {
-    const stat = fs.statSync(this.filePath);
+  async getStream(response: Response) {
+    await this.saveFile();
+
+    const path = this.getPath();
+    const stat = fs.statSync(path);
 
     response.setHeader(
       "Content-Type",
@@ -43,6 +39,6 @@ export class Download {
     );
     response.setHeader("Content-Length", stat.size);
 
-    return fs.createReadStream(this.filePath);
+    return fs.createReadStream(path);
   }
 }

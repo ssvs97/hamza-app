@@ -48,7 +48,7 @@ export class Excel {
     );
   }
 
-  async save() {
+  save() {
     const productsName = Object.keys(this.rows);
 
     for (let i = 0; i < productsName.length; i++) {
@@ -56,7 +56,7 @@ export class Excel {
       const productName = productsName[i];
 
       this.serverSave(productName, productRows);
-      await this.googleSave(productName, productRows);
+      this.googleSave(productName, productRows);
     }
   }
 
@@ -69,20 +69,16 @@ export class Excel {
   }
 
   private async googleSave(productName, productRows) {
-    try {
-      const productHeader = this.header[productName];
+    const productHeader = this.header[productName];
 
-      const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
+    const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
 
-      productHeader.unshift("date", "time", "account");
+    productHeader.unshift("date", "time", "account");
 
-      const mySet = new Set(productHeader);
-      const uniqueHeader = [...mySet];
+    const mySet = new Set(productHeader);
+    const uniqueHeader = [...mySet];
 
-      await googleSheet.setHeaderRow(uniqueHeader as string[]);
-      await googleSheet.addRows(productRows);
-    } catch (error) {
-      console.log(error);
-    }
+    await googleSheet.setHeaderRow(uniqueHeader as string[]);
+    await googleSheet.addRows(productRows);
   }
 }

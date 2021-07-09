@@ -20,7 +20,7 @@ products.get(
 
 products.get(
   "/download-pending-products",
-  ProductController.downloadPendingProducts
+  catchAsync(ProductController.downloadPendingProducts)
 );
 
 export default products;

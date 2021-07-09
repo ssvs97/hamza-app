@@ -61,10 +61,10 @@ export default class Product {
   static async downloadPendingProducts(
     _: Request,
     response: Response,
-    next: NextFunction
+    _2: NextFunction
   ) {
-    const download = new Download(next);
-    const readStream = download.getStream(response);
+    const download = new Download();
+    const readStream = await download.getStream(response);
     readStream.pipe(response);
   }
 }

@@ -7,9 +7,6 @@ import routerAccounts from "./routers/accounts";
 import routerViews from "./routers/views";
 import globalErrorHandler from "./controllers/error.controller";
 
-console.log(process.env.GOOGLE_PRIVATE_KEY);
-console.log(process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"));
-
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
