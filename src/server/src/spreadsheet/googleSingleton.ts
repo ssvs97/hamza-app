@@ -15,7 +15,10 @@ export class Google {
     try {
       await this.doc.useServiceAccountAuth({
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL as string,
-        private_key: process.env.GOOGLE_PRIVATE_KEY as string,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(
+          /\\n/g,
+          "\n"
+        ) as string,
       });
       await this.doc.loadInfo();
     } catch (error) {
