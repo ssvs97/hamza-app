@@ -1,15 +1,3 @@
-import validator from "validator";
-
-export const isEmpty = (data) => {
-  return (
-    !data || validator.isEmpty(data.toString(), { ignore_whitespace: true })
-  );
-};
-
-export const isType = (data, type) => {
-  return typeof data == type;
-};
-
 export const getDate = (date?: string) => {
   let start = new Date();
   if (date) start = new Date(date);

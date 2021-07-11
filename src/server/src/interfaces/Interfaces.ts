@@ -10,12 +10,16 @@ export type products = Array<{
   productPrice: string;
   voucherCode: string;
   length: number;
+  date: string;
+  accountNumber: string;
 }>;
 export type product = {
   productName: string;
   productPrice: string;
   voucherCode: string;
   length: number;
+  date: string;
+  accountNumber: string;
 };
 export type account = { date: string; price: number; save: Function };
 export type error = AppError & {

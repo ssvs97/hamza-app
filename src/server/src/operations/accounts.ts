@@ -3,7 +3,7 @@ import AccountService from "../services/accountService";
 export class Account {
   private account: Promise<any>;
 
-  constructor(private accountNumber, private totalPrice) {
+  constructor(private accountNumber: string, private totalPrice: number) {
     this.account = AccountService.getAccountByNumber(this.accountNumber);
   }
 

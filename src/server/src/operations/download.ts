@@ -1,24 +1,29 @@
 import ProductService from "../services/productService";
-import path from "path";
-import fs from "fs";
+import { join } from "path";
+import { existsSync, statSync, createReadStream } from "fs";
 import { Response } from "express";
 import AppError from "../utils/appError";
 import { Excel } from "../spreadsheet/excel";
+import { parallel } from "async";
 
 export class Download {
   private async saveFile() {
     const products = await ProductService.getAllPendingProducts();
 
     if (products) {
-      new Excel(products).save();
-      ProductService.updateProducts();
+      const excel = new Excel(products);
+      parallel([
+        () => excel.serverSave(),
+        () => excel.googleSave(),
+        () => ProductService.updateProducts(),
+      ]);
     }
   }
 
   private getPath() {
-    const filePath = path.join(__dirname, "../../summary-data.xlsx");
+    const filePath = join(__dirname, "../../summary-data.xlsx");
 
-    if (!fs.existsSync(filePath)) throw new AppError("File not found.", 404);
+    if (!existsSync(filePath)) throw new AppError("File not found.", 404);
 
     return filePath;
   }
@@ -27,7 +32,7 @@ export class Download {
     await this.saveFile();
 
     const path = this.getPath();
-    const stat = fs.statSync(path);
+    const stat = statSync(path);
 
     response.setHeader(
       "Content-Type",
@@ -39,6 +44,6 @@ export class Download {
     );
     response.setHeader("Content-Length", stat.size);
 
-    return fs.createReadStream(path);
+    return createReadStream(path);
   }
 }

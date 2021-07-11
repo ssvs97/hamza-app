@@ -2,7 +2,7 @@ import { formatAMPM } from "../../utils/date";
 import { accounts } from "../interfaces/interfaces";
 import { Tables } from "./tables";
 
-export class AccountsId extends Tables {
+export class Accounts extends Tables {
   constructor() {
     super(document.querySelector(".accounts-id-nav")!);
   }

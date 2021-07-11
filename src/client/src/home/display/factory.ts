@@ -1,4 +1,4 @@
-import { AccountsId } from "./accountsId";
+import { Accounts } from "./accounts";
 import { MoreInformation } from "./moreInformation";
 import { PendingProducts } from "./pendingProducts";
 import { TodayProducts } from "./todayProducts";
@@ -17,6 +17,6 @@ export class Display {
   }
 
   accountsId() {
-    return new AccountsId();
+    return new Accounts();
   }
 }

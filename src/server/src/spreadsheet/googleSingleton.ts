@@ -5,9 +5,7 @@ export class Google {
   private doc: GoogleSpreadsheet;
 
   private constructor() {
-    this.doc = new GoogleSpreadsheet(
-      "1hiol2dUM5V04XWL0SbwZq6iy3lMC2hVWRE2a06Fdvcs"
-    );
+    this.doc = new GoogleSpreadsheet(process.env.GOOGLE_ID);
     this.connect();
   }
 

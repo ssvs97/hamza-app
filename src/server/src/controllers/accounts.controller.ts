@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import AccountService from "../services/accountService";
 import AppError from "../utils/appError";
-import { getDate } from "../utils/validator";
+import { Joi } from "../utils/joi";
+import { getDate } from "../utils/date";
 
 export default class Account {
   static async getAccounts(
@@ -10,6 +11,11 @@ export default class Account {
     next: NextFunction
   ) {
     const query = request.query;
+
+    const joi = Joi.getInstance();
+    await joi.accountsQuerySchema.validateAsync(query);
+
+    console.log(query);
 
     if (query.date) {
       const [start, end] = getDate(query.date as string);

@@ -1,6 +1,7 @@
 import { utils, writeFile } from "xlsx";
 import { Google } from "./googleSingleton";
-import { formatAMPM } from "../utils/validator";
+import { formatAMPM } from "../utils/date";
+import { product, products } from "../interfaces/Interfaces";
 
 export class Excel {
   private rows: any;
@@ -9,7 +10,7 @@ export class Excel {
   private filePath: string;
   googleSpreadsheet: Google;
 
-  constructor(private products) {
+  constructor(private products: products) {
     this.filePath = "src/server/summary-data.xlsx";
     this.serverSpreadsheet = utils.book_new();
     this.googleSpreadsheet = Google.getInstance();
@@ -32,7 +33,7 @@ export class Excel {
     return this.header;
   }
 
-  private pushRow(product) {
+  private pushRow(product: product) {
     const [date, time] = formatAMPM(product.date);
     this.rows[product.productName].push({
       date: date,
@@ -42,43 +43,45 @@ export class Excel {
     });
   }
 
-  private pushHeader(product) {
+  private pushHeader(product: product) {
     this.header[product.productName].push(
       `${product.productName}/${product.productPrice}`
     );
   }
 
-  save() {
+  serverSave() {
     const productsName = Object.keys(this.rows);
 
     for (let i = 0; i < productsName.length; i++) {
-      const productRows = this.rows[productsName[i]];
       const productName = productsName[i];
+      const productRows = this.rows[productName];
 
-      this.serverSave(productName, productRows);
-      this.googleSave(productName, productRows);
+      const ws = utils.json_to_sheet(productRows);
+
+      utils.book_append_sheet(this.serverSpreadsheet, ws, productName);
+
+      writeFile(this.serverSpreadsheet, this.filePath);
     }
   }
 
-  private serverSave(productName, productRows) {
-    const ws = utils.json_to_sheet(productRows);
+  async googleSave() {
+    const productsName = Object.keys(this.rows);
 
-    utils.book_append_sheet(this.serverSpreadsheet, ws, productName);
+    for (let i = 0; i < productsName.length; i++) {
+      const productName = productsName[i];
+      const productRows = this.rows[productName];
 
-    writeFile(this.serverSpreadsheet, this.filePath);
-  }
+      const productHeader = this.header[productName];
 
-  private async googleSave(productName, productRows) {
-    const productHeader = this.header[productName];
+      const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
 
-    const googleSheet = await this.googleSpreadsheet.spreadsheet.addSheet();
+      productHeader.unshift("date", "time", "account");
 
-    productHeader.unshift("date", "time", "account");
+      const mySet = new Set(productHeader);
+      const uniqueHeader = [...mySet];
 
-    const mySet = new Set(productHeader);
-    const uniqueHeader = [...mySet];
-
-    await googleSheet.setHeaderRow(uniqueHeader as string[]);
-    await googleSheet.addRows(productRows);
+      await googleSheet.setHeaderRow(uniqueHeader as string[]);
+      googleSheet.addRows(productRows);
+    }
   }
 }

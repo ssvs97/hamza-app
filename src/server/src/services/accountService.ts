@@ -1,6 +1,6 @@
 import { account } from "../interfaces/Interfaces";
 import { Account } from "../models/accounts";
-import { getNow } from "../utils/validator";
+import { getNow } from "../utils/date";
 
 export default class ProductService {
   static async getAccountByNumber(accountNumber: string) {

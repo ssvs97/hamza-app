@@ -1,6 +1,6 @@
 import { Template } from "./template";
 
-export class AccountsId extends Template {
+export class Accounts extends Template {
   constructor() {
     super(document.querySelector(".accounts-label")! as HTMLButtonElement);
   }

@@ -1,5 +1,5 @@
 import { Product } from "../models/products";
-import { getDate, getNow } from "../utils/validator";
+import { getDate, getNow } from "../utils/date";
 import { product } from "../interfaces/Interfaces";
 
 export default class ProductService {

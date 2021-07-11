@@ -1,5 +1,6 @@
+import { parallel } from "async";
 import ProductService from "../services/productService";
-import { isEmpty } from "../utils/validator";
+import { Account } from "./accounts";
 import { Counter } from "./counter";
 
 export class UniqueProducts {
@@ -18,14 +19,21 @@ export class UniqueProducts {
         product.voucherCode
       );
 
-      if (isEmpty(existProduct)) {
-        await ProductService.saveProduct(product, this.accountNumber);
-
-        this.counterObj.update(product.productName, product.productPrice);
+      if (!existProduct) {
+        parallel([
+          () =>
+            this.counterObj.update(product.productName, product.productPrice),
+          () => ProductService.saveProduct(product, this.accountNumber),
+        ]);
       }
     }
-  }
-  extract() {
     return this.counterObj.overview;
+  }
+  saveAccount() {
+    const overview = this.counterObj.overview;
+    if (overview.items != 0) {
+      let accountObj = new Account(this.accountNumber, overview.totalPrice);
+      accountObj.processing();
+    }
   }
 }

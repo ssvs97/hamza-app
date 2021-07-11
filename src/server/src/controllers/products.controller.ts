@@ -3,7 +3,7 @@ import ProductService from "../services/productService";
 import AppError from "../utils/appError";
 import { UniqueProducts } from "../operations/uniqueProducts";
 import { Download } from "../operations/download";
-import { Account } from "../operations/accounts";
+import { Joi } from "../utils/joi";
 
 export default class Product {
   static async saveUniqueProducts(
@@ -14,15 +14,14 @@ export default class Product {
     const productsInput = request.body;
     const accountNumber = Object.keys(productsInput)[0];
 
+    const joi = Joi.getInstance();
+    await joi.saveProductsSchema.validateAsync(productsInput[accountNumber]);
+
     const uniqueProducts = new UniqueProducts(productsInput, accountNumber);
 
-    await uniqueProducts.save();
-    const overview = uniqueProducts.extract();
+    const overview = await uniqueProducts.save();
+    uniqueProducts.saveAccount();
 
-    if (overview.items != 0) {
-      let accountObj = new Account(accountNumber, overview.totalPrice);
-      accountObj.processing();
-    }
     response.send(overview);
   }
 
