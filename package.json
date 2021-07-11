@@ -16,7 +16,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "node src/server/build/app.js",
+    "start": "node src/server/build/server.js",
     "heroku-postbuild": "concurrently \"tsc\" \"webpack --config src/client/webpack.config.js\"",
     "dev": "concurrently \"tsc -w\" \"webpack --config src/client/webpack.dev.config.js --watch\"",
     "server": "env-cmd -f src/server/config/dev.env nodemon --inspect src/server/build/server.js"
