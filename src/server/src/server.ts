@@ -1,6 +1,10 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
+import os from "os";
+import cluster from "cluster";
 import { app } from "./app";
+
+const numCPUs = os.cpus().length;
 
 class Init {
   server;
@@ -40,9 +44,17 @@ class Init {
 }
 
 const init = new Init();
-
 init.uncaughtException();
-
-parallel([() => init.mongoose(), () => init.express()]);
-
 init.unhandledRejection();
+
+if (cluster.isMaster) {
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on("death", function (worker) {
+    console.log("worker " + worker.pid + " died");
+  });
+} else {
+  parallel([() => init.mongoose(), () => init.express()]);
+}
