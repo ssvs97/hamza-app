@@ -27,6 +27,16 @@ class Init {
       process.exit(1); // 0 success, 1 failure
     });
   }
+
+  unhandledRejection() {
+    process.on("unhandledRejection", (err) => {
+      console.log(err);
+      console.log(`UNHANDLED REJECTION! Shutting down...`);
+      this.server.close(() => {
+        process.exit(1); // 0 success, 1 failure
+      });
+    });
+  }
 }
 
 const init = new Init();
@@ -34,3 +44,5 @@ const init = new Init();
 init.uncaughtException();
 
 parallel([() => init.mongoose(), () => init.express()]);
+
+init.unhandledRejection();
