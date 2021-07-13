@@ -18,6 +18,7 @@ class Init {
     });
     console.log("MongoDB connected...");
   }
+
   express() {
     this.server = app.listen(process.env.PORT, () =>
       console.log("Server Running...")
@@ -47,14 +48,17 @@ const init = new Init();
 init.uncaughtException();
 init.unhandledRejection();
 
-if (cluster.isMaster) {
-  for (var i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+// if (cluster.isMaster) {
+//   console.log(`Primary ${process.pid} is running`);
 
-  cluster.on("death", function (worker) {
-    console.log("worker " + worker.pid + " died");
-  });
-} else {
-  parallel([() => init.mongoose(), () => init.express()]);
-}
+//   for (var i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+
+//   cluster.on("death", function (worker) {
+//     console.log("worker " + worker.pid + " died");
+//   });
+// } else {
+parallel([() => init.mongoose(), () => init.express()]);
+console.log(`Worker ${process.pid} started`);
+// }

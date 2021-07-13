@@ -34,7 +34,6 @@ export default class Product {
 
     response.send(products);
   }
-
   static async getPendingProducts(
     _: Request,
     response: Response,

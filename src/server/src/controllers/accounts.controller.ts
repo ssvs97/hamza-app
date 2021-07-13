@@ -15,8 +15,6 @@ export default class Account {
     const joi = Joi.getInstance();
     await joi.accountsQuerySchema.validateAsync(query);
 
-    console.log(query);
-
     if (query.date) {
       const [start, end] = getDate(query.date as string);
       const data = await AccountService.getAccountByDate(start, end);
