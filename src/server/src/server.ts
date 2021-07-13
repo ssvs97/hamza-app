@@ -1,10 +1,10 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
-import os from "os";
-import cluster from "cluster";
+// import os from "os";
+// import cluster from "cluster";
 import { app } from "./app";
 
-const numCPUs = os.cpus().length;
+// const numCPUs = os.cpus().length;
 
 class Init {
   server;
