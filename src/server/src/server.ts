@@ -1,10 +1,10 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
-// import os from "os";
-// import cluster from "cluster";
+import os from "os";
+import cluster from "cluster";
 import { app } from "./app";
 
-// const numCPUs = os.cpus().length;
+const numCPUs = os.cpus().length;
 
 class Init {
   server;
@@ -48,17 +48,17 @@ const init = new Init();
 init.uncaughtException();
 init.unhandledRejection();
 
-// if (cluster.isMaster) {
-//   console.log(`Primary ${process.pid} is running`);
+if (cluster.isMaster) {
+  console.log(`Primary ${process.pid} is running`);
 
-//   for (var i = 0; i < numCPUs; i++) {
-//     cluster.fork();
-//   }
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
 
-//   cluster.on("death", function (worker) {
-//     console.log("worker " + worker.pid + " died");
-//   });
-// } else {
-parallel([() => init.mongoose(), () => init.express()]);
-console.log(`Worker ${process.pid} started`);
-// }
+  cluster.on("death", function (worker) {
+    console.log("worker " + worker.pid + " died");
+  });
+} else {
+  parallel([() => init.mongoose(), () => init.express()]);
+  console.log(`Worker ${process.pid} started`);
+}
