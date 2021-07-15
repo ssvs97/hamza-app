@@ -1,7 +1,7 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
 import os from "os";
-import cluster from "cluster";
+// import cluster from "cluster";
 import { app } from "./app";
 
 const numCPUs = os.cpus().length;
@@ -19,9 +19,9 @@ class Init {
     console.log("MongoDB connected...");
   }
 
-  express() {
-    this.server = app.listen(process.env.PORT, () =>
-      console.log("Server Running...")
+  express(port: number) {
+    this.server = app.listen(port, () =>
+      console.log(`Server running on port ${port}...`)
     );
   }
 
@@ -48,17 +48,24 @@ const init = new Init();
 init.uncaughtException();
 init.unhandledRejection();
 
-if (cluster.isMaster) {
-  console.log(`Primary ${process.pid} is running`);
+// if (cluster.isMaster) {
+//   console.log(`Primary ${process.pid} is running`);
 
-  for (var i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+//   for (var i = 0; i < numCPUs; i++) {
+//     process.env.PORT += i.toString();
+//     cluster.fork();
+//   }
 
-  cluster.on("death", function (worker) {
-    console.log("worker " + worker.pid + " died");
-  });
-} else {
-  parallel([() => init.mongoose(), () => init.express()]);
-  console.log(`Worker ${process.pid} started`);
+//   cluster.on("death", function (worker) {
+//     console.log("worker " + worker.pid + " died");
+//   });
+// } else {
+//   parallel([() => init.mongoose(), () => init.express()]);
+//   console.log(`Worker ${process.pid} started`);
+// }
+
+for (var i = 0; i < numCPUs; i++) {
+  const port = +process.env.PORT! + i;
+
+  parallel([() => init.mongoose(), () => init.express(port)]);
 }
