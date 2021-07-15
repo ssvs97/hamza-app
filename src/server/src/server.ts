@@ -1,10 +1,10 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
-import os from "os";
+import { cpus, networkInterfaces } from "os";
 // import cluster from "cluster";
 import { app } from "./app";
 
-const numCPUs = os.cpus().length;
+const numCPUs = cpus().length;
 
 class Init {
   server;
@@ -43,6 +43,8 @@ class Init {
     });
   }
 }
+
+console.log(networkInterfaces());
 
 const init = new Init();
 init.uncaughtException();
