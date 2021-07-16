@@ -35,6 +35,8 @@ export class Converter extends Template {
   }
 
   async operation(response: Response) {
+    this.clearText();
+
     const products = await response.json();
     if (products.items == 0) throw new Error("0 item added");
 
@@ -61,8 +63,8 @@ export class Converter extends Template {
 
     const data: converter = { [accountNumber]: [] };
 
-    for (let i = 0; i < productTitle.length; i++) {
-      const element = productTitle[i];
+    for (let i = 0; i < voucherCode.length; i++) {
+      const element = productTitle[i * 2];
       const [price, productName] = element.split(" ");
 
       data[accountNumber].push({
@@ -72,6 +74,11 @@ export class Converter extends Template {
       });
     }
     return data;
+  }
+
+  clearText() {
+    this.textArea.value = "";
+    this.accountId.value = "";
   }
 
   display() {

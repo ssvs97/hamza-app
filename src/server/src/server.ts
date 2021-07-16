@@ -1,10 +1,11 @@
 import { parallel } from "async";
 import { connect } from "mongoose";
-import { cpus, networkInterfaces } from "os";
+// import { cpus, networkInterfaces } from "os";
 // import cluster from "cluster";
 import { app } from "./app";
+// import "./services/cache";
 
-const numCPUs = cpus().length;
+// const numCPUs = cpus().length;
 
 class Init {
   server;
@@ -19,9 +20,9 @@ class Init {
     console.log("MongoDB connected...");
   }
 
-  express(port: number) {
-    this.server = app.listen(port, () =>
-      console.log(`Server running on port ${port}...`)
+  express() {
+    this.server = app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}...`)
     );
   }
 
@@ -44,7 +45,7 @@ class Init {
   }
 }
 
-console.log(networkInterfaces());
+// console.log(networkInterfaces());
 
 const init = new Init();
 init.uncaughtException();
@@ -66,8 +67,8 @@ init.unhandledRejection();
 //   console.log(`Worker ${process.pid} started`);
 // }
 
-for (var i = 0; i < numCPUs; i++) {
-  const port = +process.env.PORT! + i;
+// for (var i = 0; i < numCPUs; i++) {
+//   const port = +process.env.PORT! + i;
 
-  parallel([() => init.mongoose(), () => init.express(port)]);
-}
+parallel([() => init.mongoose(), () => init.express()]);
+// }

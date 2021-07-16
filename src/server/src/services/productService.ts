@@ -1,6 +1,7 @@
 import { Product } from "../models/products";
 import { getDate, getNow } from "../utils/date";
 import { product } from "../interfaces/Interfaces";
+// import { aggregateHandle } from "../utils/aggregate";
 
 export default class ProductService {
   static async getAllProducts() {
@@ -53,6 +54,9 @@ export default class ProductService {
         },
       },
     ]);
+
+    // const data = aggregateHandle(products);
+
     if (products.length == 0) products.push(this.setIntialCounter());
     return products[0];
   }
